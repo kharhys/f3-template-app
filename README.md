@@ -18,22 +18,26 @@ Using `f3` to initialize a fullstack app results in the following diectory stuct
 		* "build:client" *build client only*
 		* "build:server" *build  server only*
 
-#### `feathers` baked into `nuxt`
----
-The contents of `src/client` are processed through `nuxt` following configurations in declared under the key `nuxt` in the file `f3.config` See [nuxt documentation](https://nuxtjs.org/).
+# Architecture Overview
 
-In addition to the resources in a standard `nuxt` project,   `src/client` includes an extra folder called `api` containing a single file named `feathers.js` for initializing `feathers` on the frontend. 
+Can be considered data driven in architecture. There are, conceptually, two layers	
 
-The instance is available within `Vue` components as `this.$store.app` and within `Vuex` store modules as `this.app` to provide access to backend `services`.
+* Isomorphic data presentation engine
+* Isomorphic real-time data server
 
-> Ensure that you first declare every service you intend to use in `api/feathers.js` 
+`feathers` is the real-time data server and`nuxt` is the isomorphic presentation engine. `feathers` does all server-side processing except rendering which is left to `nuxt` and accomplished either on the server or on the browser. The server instance available as `this.app.api` or `this.$store.app.api` is either a `feathers-client` instance if rendered client-side or a `feathers` server instance when rendered server-side.
 
-When rendering is done server-side, `feathers-client`is never initialized. Instead, `feathers` server instance will be availed as stated above. 
+ `nuxt` is configured to use `Vuex` in modules mode. `feathers` server is accessible at the presentation layer on the client or on the server as `this.app.api` in `Vuex` store modules or as `this.$store.app.api` in `Vue` components.
 
->Thanks, to its isomorphic design, replacing  `feathers` **client ** *instance* with **server** *instance* does not necessiate changing our code.
+> It is recommended to externalize back-end services access logic outside components into store actions where you can access the server as `this.app.api`. However, there are other features of the back-end `api` that you may want to use in your components. For instance, `storyboard` logging (More on that below).
+
+## Presentation Layer
+------
+
+Data presentation is done using `Vue.js`. For efficient `Server Side Rendering` and many other features  `nuxt` is used.  This makes the data presentation layer capable of running on the server or on client. The data for the presentation layer is availed by `feathers`
 
 #### `nuxt` baked into `feathers`
-----
+
 The content of `src/server` are processed by backpack are processed through `backpack` following configurations in declared under the key `backpack` in the file `f3.config`.  
 
 **Backpack** handles file-watching, live-reloading, transpiling, and bundling targeting server so we can use awesome tools like [livescript](http://livescript.net/) or latest`EcmaScript` features. See [configuration options](https://github.com/jaredpalmer/backpack). 
@@ -41,6 +45,31 @@ The content of `src/server` are processed by backpack are processed through `bac
 In addition to standard `feathers` **server** resources, a middleware is included for leveraging `nuxt` on the server. It sets up `nuxt` for **server side rendering** and stashes the app instance in the context of every `request` so that it is accessible within `nuxtServerInit`.
 
 >Ensure that nuxt middleware is declared last and that middleware configuration is last to set up.
+
+
+#### `feathers` baked into `nuxt`
+
+The contents of `src/client` are processed through `nuxt` following configurations in declared under the key `nuxt` in the file `f3.config` See [nuxt documentation](https://nuxtjs.org/).
+
+In addition to the resources in a standard `nuxt` project,   `src/client` includes an extra folder called `api` containing a single file named `feathers.js` for initializing `feathers` on the frontend. 
+
+The instance is available within `Vue` components as `this.$store.app.api` and within `Vuex` store modules as `this.app.api` to provide access to backend `services`.
+
+> Ensure that you first declare every service you intend to use in `api/feathers.js` 
+
+When rendering is done server-side, `feathers-client`is never initialized. Instead, `feathers` server instance will be availed as stated above. 
+
+>Thanks, to its isomorphic design, replacing  `feathers` **client ** *instance* with **server** *instance* does not necessiate changing our code.
+
+
+## Persistence Layer
+------
+
+#### mongodb baked in 
+Mongo Database set up with
+
+* `mongoose` for model ***schema*** *declaration* and *validation*
+* `mongoose-gridfs` for ***streaming*** file uploads to `mongodb`
 
 
 
