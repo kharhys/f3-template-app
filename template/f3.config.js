@@ -1,6 +1,33 @@
 const path = require('path')
 
 module.exports = {
+  paths: {
+    pkgDir: path.resolve(__dirname),
+    srcDir: path.resolve(__dirname, 'src'), // uncompiled sources
+    configDir: path.resolve(__dirname, 'config'), // server configuration
+    deployDir: path.resolve(__dirname, 'releases'), // deployable builds
+  },
+  deploy: { 
+    // available deployment options: pods, now, ghpages, surge,
+
+    server: { // server deployments deal with the realtime server
+
+      // pod :: git push deployment for Node.JS - see https://github.com/yyx990803/pod 
+      // The remote host must be accessible via SSH. Multiple targets may be provided.
+      // For each target, a directory with provided name is created inside paths.deployDir
+      // and populated with copies of package.json, f3.config.js, configDir and srcDir
+      pods: [      
+        {
+          name: 'newyork', //servername. 
+          host: '', // server IP or FQDN
+          user: '', // SSH user name. 
+          // SSH user password or private key passphrase will be prompted
+        }
+      ]
+
+
+    }
+  },
   backpack: (config, options, webpack) => {
     // server main file
     config.entry.main = path.resolve(__dirname, 'src', 'server', 'index.ls')
