@@ -4,7 +4,7 @@
 2. `f3 init fullstack-app`
 
 #### Directory structure
-Using `f3` to initialize a fullstack app results in the following diectory stucture
+Using `f3` to initialize a fullstack app results in the following directory stucture
 
 
 ```text
@@ -42,25 +42,28 @@ Using `f3` to initialize a fullstack app results in the following diectory stuct
 ```
 
 
-# Architecture Overview
+## Logical structure
+------
 
 Can be considered data driven in architecture. There are, conceptually, two layers	
+Relies on the capabilities of both `nuxt` and `feathers` to run on both the `browser` and `node`.
 
-* Isomorphic data presentation engine
-* Isomorphic real-time data server
+This is a `feathers` server using embeded `nuxt` middleware for building and rendering `UI` defined as `Vue` `SFC`s.
 
-`feathers` is the real-time data server and`nuxt` is the isomorphic presentation engine. `feathers` does all server-side processing except rendering which is left to `nuxt` and accomplished either on the server or on the browser. The server instance available as `this.app.api` or `this.$store.app.api` is either a `feathers-client` instance if rendered client-side or a `feathers` server instance when rendered server-side.
+> Building only happens when app runs in `development` mode. Ensure you build the client before starting server in `production` mode.
 
- `nuxt` is configured to use `Vuex` in modules mode. `feathers` server is accessible at the presentation layer on the client or on the server as `this.app.api` in `Vuex` store modules or as `this.$store.app.api` in `Vue` components.
+By default, `nuxt` is set to build in **universal** mode so that the resulting build is an **isomorphic**; it can be used by the embedded middleware to render a ***route*** as a **pwa** that supports client-side navigation. `feathers` being isomorphic as well provides access to backend service to the universal build during rendering on the server and to the rendered ***route*** during interactions on the browser. 
+
+> When deploying client build using `f3` to a static content server - such as **now.sh**, **surge.sh**, **ghpages** - 
+`nuxt build` will be invoked with the **mode** option set to ***spa***. The resulting build does not require and will not work with the embedded middleware but it supports client-side navigation.
+
+When a ***route*** in the **universal build** is rendered server side, the the server instance availed to ***nuxt resources*** is the actual Node.JS server. During client-side navigation, however, the available server instance is a proxy to the actual server over **webssocket** connection. The two instances have the same `API`.
+
+Within ***nuxt resources*** the server instance can be accessed from `Vue` `SFC` script as `this.$store.app.api` or as `this.app.api` from `Vuex` store modules. It can also be accessed in your page middleware as well.
 
 > It is recommended to externalize back-end services access logic outside components into store actions where you can access the server as `this.app.api`. However, there are other features of the back-end `api` that you may want to use in your components. For instance, `storyboard` logging (More on that below).
 
-## Presentation Layer
-------
-
-Data presentation is done using `Vue.js`. For efficient `Server Side Rendering` and many other features  `nuxt` is used.  This makes the data presentation layer capable of running on the server or on client. The data for the presentation layer is availed by `feathers`
-
-#### `nuxt` baked into `feathers`
+### `nuxt` baked into `feathers`
 
 The content of `src/server` are processed by backpack are processed through `backpack` following configurations in declared under the key `backpack` in the file `f3.config`.  
 
@@ -86,7 +89,7 @@ When rendering is done server-side, `feathers-client`is never initialized. Inste
 >Thanks, to its isomorphic design, replacing  `feathers` **client ** *instance* with **server** *instance* does not necessiate changing our code.
 
 
-## Persistence Layer
+## Features
 ------
 
 #### mongodb baked in 
