@@ -6,17 +6,41 @@
 #### Directory structure
 Using `f3` to initialize a fullstack app results in the following diectory stucture
 
-* **f3.config.js**  *webpack configuration*
-* ***config/***  *server environment variables*
-* ***src/*** *uncompiled code*
-	* ***client/***  *nuxt frontend*
-	* ***server/***  *feathers backend*
-* **package.json**  *orchestration scripts*
-	* **scripts:**
-		* "dev" 	*run app in development*
-		* "build" *build client and server*
-		* "build:client" *build client only*
-		* "build:server" *build  server only*
+
+```text
+.
+├── /f3.config.js								# nuxt & backpack configuration
+├── /config/                                    # server environment variables
+	├── /default.json                           #   settings for development env
+	└── /production.json                        #   settings for production env 
+└── /src
+    ├── /client/                                # nuxt frontend resources
+        ├── /assets/                            # files to include in webpack bundle  
+        ├── /static/                            # files to serve as static assets 
+        ├── /pages/                             # Vue SFC accessible via a URL    
+        ├── /components/                        # Vue SFC to use within other SFC
+        ├── /layouts/                           # Vue SFC to use for page layout        
+        ├── /middleware/                        # functions run before page render
+        ├── /plugins/                           # functions to extend Vue.js
+        ├── /store/                             # Vuex store modules
+        └── /api/                               # directory added by f3
+	        └── /feathers.js                    # feathers client for nuxt
+    └── /server/                                # feathers server 
+        ├── /index.ls                           # entry. imports and initializes app         
+        ├── /app.ls                             # declares feathers app
+        ├── /mongoose.ls                        # configures app to use mongoose 
+        ├── /authentication.ls                  # configures app for authentication
+        ├── /app.hooks.ls                       # configures global app hooks
+        ├── /hooks/                             # triggers run during resource access
+        ├── /services/                          # real-time access to HTTP resources 
+        ├── /seed/                              # triggers to pre-populate database
+        ├── /schemas/                           # mongoose schemas for HTTP resources 
+        ├── /models/                            # mongoose models for HTTP resources 
+        ├── /email-templates/                   # pug templates for email messages
+        └── /middleware/                        # standard express js middleware
+	        └── /nuxt.ls                        # nuxt to render within feathers
+```
+
 
 # Architecture Overview
 
