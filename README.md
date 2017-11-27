@@ -9,12 +9,12 @@ Using `f3` to initialize a fullstack app results in the following diectory stuct
 
 ```text
 .
-├── /f3.config.js								# nuxt & backpack configuration
+├── /f3.config.js                               # nuxt & backpack configuration
 ├── /config/                                    # server environment variables
 	├── /default.json                           #   settings for development env
 	└── /production.json                        #   settings for production env 
 └── /src
-    ├── /client/                                # nuxt frontend resources
+    ├── /client/                                # compiled through nuxt
         ├── /assets/                            # files to include in webpack bundle  
         ├── /static/                            # files to serve as static assets 
         ├── /pages/                             # Vue SFC accessible via a URL    
@@ -25,9 +25,9 @@ Using `f3` to initialize a fullstack app results in the following diectory stuct
         ├── /store/                             # Vuex store modules
         └── /api/                               # directory added by f3
 	        └── /feathers.js                    # feathers client for nuxt
-    └── /server/                                # feathers server 
-        ├── /index.ls                           # entry. imports and initializes app         
-        ├── /app.ls                             # declares feathers app
+    └── /server/                                # compiled through backpack
+        ├── /index.ls                           # entry to import & initialize app         
+        ├── /app.ls                             # sets up feathers app
         ├── /mongoose.ls                        # configures app to use mongoose 
         ├── /authentication.ls                  # configures app for authentication
         ├── /app.hooks.ls                       # configures global app hooks
@@ -37,8 +37,8 @@ Using `f3` to initialize a fullstack app results in the following diectory stuct
         ├── /schemas/                           # mongoose schemas for HTTP resources 
         ├── /models/                            # mongoose models for HTTP resources 
         ├── /email-templates/                   # pug templates for email messages
-        └── /middleware/                        # standard express js middleware
-	        └── /nuxt.ls                        # nuxt to render within feathers
+        └── /middleware/                        # standard express middleware
+	        └── /nuxt.ls                        #   nuxt to render within feathers
 ```
 
 
