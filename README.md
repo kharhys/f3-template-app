@@ -11,8 +11,8 @@ Using `f3` to initialize a fullstack app results in the following diectory stuct
 .
 ├── /f3.config.js                               # nuxt & backpack configuration
 ├── /config/                                    # server environment variables
-	├── /default.json                           #   settings for development env
-	└── /production.json                        #   settings for production env 
+	├── /default.json                           # settings for development env
+	└── /production.json                        # settings for production env 
 └── /src
     ├── /client/                                # compiled through nuxt
         ├── /assets/                            # files to include in webpack bundle  
@@ -38,7 +38,7 @@ Using `f3` to initialize a fullstack app results in the following diectory stuct
         ├── /models/                            # mongoose models for HTTP resources 
         ├── /email-templates/                   # pug templates for email messages
         └── /middleware/                        # standard express middleware
-	        └── /nuxt.ls                        #   nuxt to render within feathers
+	        └── /nuxt.ls                        # nuxt to render within feathers
 ```
 
 
