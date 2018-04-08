@@ -19,3 +19,4 @@ jspm_packages
 *.tgz
 dist
 webpack.js
+package-lock.json
